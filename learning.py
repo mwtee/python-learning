@@ -24,4 +24,6 @@ data = pd.read_excel(
 data[sma50Key] = data[closeKey].rolling(50).mean()
 data[sma100Key] = data[closeKey].rolling(100).mean()
 
-data.plot()
+data[closeKey].plot().legend()
+data[sma50Key].plot().legend()
+data[sma100Key].plot().legend()
