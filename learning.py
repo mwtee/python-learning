@@ -37,12 +37,8 @@ def plot_graph(data, legends, xLabel="", yLabel=""):
     plt.xlabel(xLabel)
     plt.ylabel(yLabel)
     
-plot_graph(data[stockDataKeys], stockDataKeys, "Time", "Price")
-
-#plot_graph(data[strategyDataKeys], strategyDataKeys, "Time", "Return")
-    
-#plt.plot(data[keysForPlotting])
-#plt.legend(keysForPlotting)
+#plot_graph(data[stockDataKeys], stockDataKeys, "Time", "Price")
+plot_graph(data[strategyDataKeys], strategyDataKeys, "Time", "Return")
 
 """
 import backtrader as bt
