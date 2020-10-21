@@ -31,6 +31,7 @@ stockDataKeys = [closeKey, sma50Key]
 strategyDataKeys = [strategyKey, buyHoldKey]
 
 def plot_graph(data, legends, xLabel="", yLabel=""):
+    """Plot the a graph base on the params."""
     plt.plot(data)
     plt.legend(legends)
     plt.xlabel(xLabel)
