@@ -11,12 +11,11 @@ strategyKey = "Strategy"
 strategyPctKey = "StrategyPct"
 buyHoldKey = "BuyHold"
 
-data = pd.read_excel(
-    r"C:\Users\Dell G3 3590\OneDrive\sp500_2009_2020.xlsx", 
-    index_col=dateKey, 
-    parse_dates=[dateKey],
-    usecols=[dateKey, closeKey]
-)
+def read_excel(path, index_col):
+    """Read excel file base on the file path and index col and returns the data frame."""
+    return pd.read_excel(path, index_col = index_col, parse_dates = [index_col])
+
+data = read_excel(r"C:\Users\Dell G3 3590\OneDrive\sp500_2009_2020.xlsx", dateKey)
 
 data[sma50Key] = data[closeKey].rolling(50).mean()
 data[sma100Key] = data[closeKey].rolling(100).mean()
