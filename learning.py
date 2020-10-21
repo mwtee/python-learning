@@ -11,11 +11,15 @@ strategyKey = "Strategy"
 strategyPctKey = "StrategyPct"
 buyHoldKey = "BuyHold"
 
-def read_excel(path, index_col):
+def read_csv(path, index_col, use_cols):
     """Read excel file base on the file path and index col and returns the data frame."""
-    return pd.read_excel(path, index_col = index_col, parse_dates = [index_col])
+    return pd.read_csv(path, index_col = index_col, parse_dates = [index_col], usecols=use_cols)
 
-data = read_excel(r"C:\Users\Dell G3 3590\OneDrive\sp500_2009_2020.xlsx", dateKey)
+data = read_csv(
+    r"C:\Users\Dell G3 3590\OneDrive\StockData\SPY.csv",
+    dateKey, 
+    [dateKey, closeKey]
+    )
 
 data[sma50Key] = data[closeKey].rolling(50).mean()
 data[sma100Key] = data[closeKey].rolling(100).mean()
@@ -38,7 +42,22 @@ def plot_graph(data, legends, xLabel="", yLabel=""):
     plt.ylabel(yLabel)
     
 #plot_graph(data[stockDataKeys], stockDataKeys, "Time", "Price")
-plot_graph(data[strategyDataKeys], strategyDataKeys, "Time", "Return")
+#plot_graph(data[strategyDataKeys], strategyDataKeys, "Time", "Return")
+
+spyData = read_csv(
+    r"C:\Users\Dell G3 3590\OneDrive\StockData\SPY.csv",
+    dateKey, 
+    [dateKey, closeKey]
+    ).pct_change()
+
+aaplData = read_csv(
+    r"C:\Users\Dell G3 3590\OneDrive\StockData\aapl.csv",
+    dateKey, 
+    [dateKey, closeKey]
+    ).pct_change()
+
+corData = spyData.rolling(50).corr(aaplData)[-200:]
+plot_graph(corData, ["AAPL and SPY cor"])
 
 """
 import backtrader as bt
