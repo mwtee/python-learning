@@ -15,6 +15,30 @@ def read_csv(path, index_col, use_cols):
     """Read excel file base on the file path and index col and returns the data frame."""
     return pd.read_csv(path, index_col = index_col, parse_dates = [index_col], usecols=use_cols)
 
+def calculate_corr(series1, series2, window):
+    """
+    Calculate correlation between two series.
+    Parameters
+    ----------
+    series1: DataFrame
+    series2: DataFrame
+    window: Int
+
+    Returns
+    -------
+    DataFrame
+    """
+    ret1 = series1.pct_change()
+    ret2 = series2.pct_change()
+    return ret1.rolling(window).corr(ret2)
+
+def plot_graph(data, legends, xLabel="", yLabel=""):
+    """Plot the a graph base on the params."""
+    plt.plot(data)
+    plt.legend(legends)
+    plt.xlabel(xLabel)
+    plt.ylabel(yLabel)
+
 data = read_csv(
     r"C:\Users\Dell G3 3590\OneDrive\StockData\SPY.csv",
     dateKey, 
@@ -33,13 +57,6 @@ data[buyHoldKey] = (data[closeKey].pct_change(1) + 1).cumprod()
 
 stockDataKeys = [closeKey, sma50Key]
 strategyDataKeys = [strategyKey, buyHoldKey]
-
-def plot_graph(data, legends, xLabel="", yLabel=""):
-    """Plot the a graph base on the params."""
-    plt.plot(data)
-    plt.legend(legends)
-    plt.xlabel(xLabel)
-    plt.ylabel(yLabel)
     
 #plot_graph(data[stockDataKeys], stockDataKeys, "Time", "Price")
 #plot_graph(data[strategyDataKeys], strategyDataKeys, "Time", "Return")
@@ -48,27 +65,15 @@ spyData = read_csv(
     r"C:\Users\Dell G3 3590\OneDrive\StockData\SPY.csv",
     dateKey, 
     [dateKey, closeKey]
-    ).pct_change()
+    )
 
 aaplData = read_csv(
     r"C:\Users\Dell G3 3590\OneDrive\StockData\aapl.csv",
     dateKey, 
     [dateKey, closeKey]
-    ).pct_change()
+    )
 
-corData = spyData.rolling(50).corr(aaplData)[-200:]
+corData = calculate_corr(spyData, aaplData, 50)[-200:]
+#corData = spyData.rolling(50).corr(aaplData)[-200:]
 plot_graph(corData, ["AAPL and SPY cor"])
 
-"""
-import backtrader as bt
-
-if __name__ == '__main__':
-    cerebro = bt.Cerebro()
-    cerebro.broker.setcash(100000.0)
-
-    print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
-
-    cerebro.run()
-
-    print('Final Portfolio Value: %.2f' % cerebro.broker.getvalue())
-"""
