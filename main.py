@@ -52,6 +52,7 @@ def plot_correlation(stock_one_ticker, stock_two_ticker):
     
     plot_graph(corData, ["%s and %s cor" % (stock_one_ticker, stock_two_ticker)])
 
+#WIP
 def work_in_progress(stock_one_ticker, stock_two_ticker):
     spyData = read_csv(
         r"StockData\%s.csv" % (stock_one_ticker),
