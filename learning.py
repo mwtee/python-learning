@@ -40,7 +40,7 @@ def plot_graph(data, legends, xLabel="", yLabel=""):
     plt.ylabel(yLabel)
 
 data = read_csv(
-    r"C:\Users\Dell G3 3590\OneDrive\StockData\SPY.csv",
+    r"StockData\SPY.csv",
     dateKey, 
     [dateKey, closeKey]
     )
@@ -62,18 +62,23 @@ strategyDataKeys = [strategyKey, buyHoldKey]
 #plot_graph(data[strategyDataKeys], strategyDataKeys, "Time", "Return")
 
 spyData = read_csv(
-    r"C:\Users\Dell G3 3590\OneDrive\StockData\SPY.csv",
+    r"StockData\SPY.csv",
     dateKey, 
     [dateKey, closeKey]
     )
 
 aaplData = read_csv(
-    r"C:\Users\Dell G3 3590\OneDrive\StockData\aapl.csv",
+    r"StockData\aapl.csv",
     dateKey, 
     [dateKey, closeKey]
     )
 
-corData = calculate_corr(spyData, aaplData, 50)[-200:]
-#corData = spyData.rolling(50).corr(aaplData)[-200:]
+corData = calculate_corr(spyData, aaplData, 50)[-200:].cumprod()
+
+points_to_plot = 300
+spyData["Spy_Rebased"] = (spyData[-points_to_plot:]["Close"].pct_change() + 1).cumprod()
+aaplData["AAPL_Rebased"] = (aaplData[-points_to_plot:]["Close"].pct_change() + 1).cumprod()
+
+corData = spyData.rolling(50).corr(aaplData)[-200:]
 plot_graph(corData, ["AAPL and SPY cor"])
 
