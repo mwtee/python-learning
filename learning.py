@@ -3,27 +3,37 @@ from constants import dateKey, closeKey, sma50Key, sma100Key, positionKey, strat
 
 import numpy as np
     
-data = read_csv(
-    r"StockData\SPY.csv",
-    dateKey, 
-    [dateKey, closeKey]
+def plot_stock_with_sma():
+    data = read_csv(
+        r"StockData\SPY.csv",
+        dateKey, 
+        [dateKey, closeKey]
     )
 
-data[sma50Key] = data[closeKey].rolling(50).mean()
-data[sma100Key] = data[closeKey].rolling(100).mean()
-
-data[positionKey] = np.where(data[sma50Key] > data[sma100Key], 1, 0)
-data[positionKey] = data[positionKey].shift(1)
-
-data[strategyPctKey] = data[closeKey].pct_change(1) * data[positionKey]
-data[strategyKey] = (data[strategyPctKey] + 1).cumprod()
-data[buyHoldKey] = (data[closeKey].pct_change(1) + 1).cumprod()
-
-stockDataKeys = [closeKey, sma50Key]
-strategyDataKeys = [strategyKey, buyHoldKey]
+    data[sma50Key] = data[closeKey].rolling(50).mean()
+    data[sma100Key] = data[closeKey].rolling(100).mean()
     
-#plot_graph(data[stockDataKeys], stockDataKeys, "Time", "Price")
-#plot_graph(data[strategyDataKeys], strategyDataKeys, "Time", "Return")
+    stockDataKeys = [closeKey, sma50Key]
+    plot_graph(data[stockDataKeys], stockDataKeys, "Time", "Price")
+    
+def plot_sma_crossover_vs_buy_and_hold_strategy_comparison():
+    data = read_csv(
+        r"StockData\SPY.csv",
+        dateKey, 
+        [dateKey, closeKey]
+    )
+    
+    data[sma50Key] = data[closeKey].rolling(50).mean()
+    data[sma100Key] = data[closeKey].rolling(100).mean()
+    data[positionKey] = np.where(data[sma50Key] > data[sma100Key], 1, 0)
+    data[positionKey] = data[positionKey].shift(1)
+    
+    data[strategyPctKey] = data[closeKey].pct_change(1) * data[positionKey]
+    data[strategyKey] = (data[strategyPctKey] + 1).cumprod()
+    data[buyHoldKey] = (data[closeKey].pct_change(1) + 1).cumprod()    
+
+    strategyDataKeys = [strategyKey, buyHoldKey]
+    plot_graph(data[strategyDataKeys], strategyDataKeys, "Time", "Return")
 
 spyData = read_csv(
     r"StockData\SPY.csv",
@@ -44,5 +54,7 @@ spyData["Spy_Rebased"] = (spyData[-points_to_plot:][closeKey].pct_change() + 1).
 aaplData["AAPL_Rebased"] = (aaplData[-points_to_plot:][closeKey].pct_change() + 1).cumprod()
 
 corData = spyData.rolling(50).corr(aaplData)[-200:]
-plot_graph(corData, ["AAPL and SPY cor"])
+#plot_graph(corData, ["AAPL and SPY cor"])
 
+#plot_stock_with_sma()
+plot_sma_crossover_vs_buy_and_hold_strategy_comparison()
