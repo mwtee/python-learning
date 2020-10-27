@@ -1,16 +1,8 @@
 from helper_functions import read_csv, calculate_corr, plot_graph
+from constants import dateKey, closeKey, sma50Key, sma100Key, positionKey, strategyKey, strategyPctKey, buyHoldKey
 
 import numpy as np
     
-dateKey = "Date"
-closeKey = "Close"
-sma50Key = "SMA50"
-sma100Key = "SMA100"
-positionKey = "position"
-strategyKey = "Strategy"
-strategyPctKey = "StrategyPct"
-buyHoldKey = "BuyHold"
-
 data = read_csv(
     r"StockData\SPY.csv",
     dateKey, 
@@ -48,8 +40,8 @@ aaplData = read_csv(
 corData = calculate_corr(spyData, aaplData, 50)[-200:].cumprod()
 
 points_to_plot = 300
-spyData["Spy_Rebased"] = (spyData[-points_to_plot:]["Close"].pct_change() + 1).cumprod()
-aaplData["AAPL_Rebased"] = (aaplData[-points_to_plot:]["Close"].pct_change() + 1).cumprod()
+spyData["Spy_Rebased"] = (spyData[-points_to_plot:][closeKey].pct_change() + 1).cumprod()
+aaplData["AAPL_Rebased"] = (aaplData[-points_to_plot:][closeKey].pct_change() + 1).cumprod()
 
 corData = spyData.rolling(50).corr(aaplData)[-200:]
 plot_graph(corData, ["AAPL and SPY cor"])

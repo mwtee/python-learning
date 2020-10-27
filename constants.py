@@ -1,0 +1,8 @@
+dateKey = "Date"
+closeKey = "Close"
+sma50Key = "SMA50"
+sma100Key = "SMA100"
+positionKey = "position"
+strategyKey = "Strategy"
+strategyPctKey = "StrategyPct"
+buyHoldKey = "BuyHold"
