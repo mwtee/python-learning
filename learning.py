@@ -33,28 +33,41 @@ def plot_sma_crossover_vs_buy_and_hold_strategy_comparison():
     data[buyHoldKey] = (data[closeKey].pct_change(1) + 1).cumprod()    
 
     strategyDataKeys = [strategyKey, buyHoldKey]
-    plot_graph(data[strategyDataKeys], strategyDataKeys, "Time", "Return")
+    plot_graph(data[strategyDataKeys], strategyDataKeys, "Time", "Returns")
 
-spyData = read_csv(
-    r"StockData\SPY.csv",
-    dateKey, 
-    [dateKey, closeKey]
-    )
+def plot_correlation(stock_one_ticker, stock_two_ticker):
+    spyData = read_csv(
+        r"StockData\%s.csv" % (stock_one_ticker),
+        dateKey, 
+        [dateKey, closeKey]
+        )
+    
+    aaplData = read_csv(
+        r"StockData\%s.csv" % (stock_two_ticker),
+        dateKey, 
+        [dateKey, closeKey]
+        )
+    
+    corData = calculate_corr(spyData, aaplData, 50)[-100:]
+    
+    plot_graph(corData, ["%s and %s cor" % (stock_one_ticker, stock_two_ticker)])
 
-aaplData = read_csv(
-    r"StockData\aapl.csv",
-    dateKey, 
-    [dateKey, closeKey]
-    )
-
-corData = calculate_corr(spyData, aaplData, 50)[-200:].cumprod()
-
-points_to_plot = 300
-spyData["Spy_Rebased"] = (spyData[-points_to_plot:][closeKey].pct_change() + 1).cumprod()
-aaplData["AAPL_Rebased"] = (aaplData[-points_to_plot:][closeKey].pct_change() + 1).cumprod()
-
-corData = spyData.rolling(50).corr(aaplData)[-200:]
-#plot_graph(corData, ["AAPL and SPY cor"])
-
+def work_in_progress(stock_one_ticker, stock_two_ticker):
+    spyData = read_csv(
+        r"StockData\%s.csv" % (stock_one_ticker),
+        dateKey, 
+        [dateKey, closeKey]
+        )
+    
+    aaplData = read_csv(
+        r"StockData\%s.csv" % (stock_two_ticker),
+        dateKey, 
+        [dateKey, closeKey]
+        )
+    points_to_plot = 300
+    spyData["Spy_Rebased"] = (spyData[-points_to_plot:][closeKey].pct_change() + 1).cumprod()
+    aaplData["AAPL_Rebased"] = (aaplData[-points_to_plot:][closeKey].pct_change() + 1).cumprod()
+    
 #plot_stock_with_sma()
 plot_sma_crossover_vs_buy_and_hold_strategy_comparison()
+#plot_correlation("SPY", "AAPL")
