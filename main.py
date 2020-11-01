@@ -65,37 +65,41 @@ def work_in_progress(stock_one_ticker, stock_two_ticker):
         dateKey, 
         [dateKey, closeKey]
         )
+        
     points_to_plot = 300
     spyData["Spy_Rebased"] = (spyData[-points_to_plot:][closeKey].pct_change() + 1).cumprod()
     aaplData["AAPL_Rebased"] = (aaplData[-points_to_plot:][closeKey].pct_change() + 1).cumprod()
     
-def print_menu():
-    print(22 * "-" , "Ming's Algo Learning" , 22 * "-")
-    print("1. SPY with SMA")
-    print("2. SMA crossover strategy backtest")
-    print("3. AAPL and SPY price correlation")
-    print("Q. Exit")
-    print(66 * "-")
+work_in_progress("spy", "aapl")
     
-loop=True
+    
+# def print_menu():
+#     print(22 * "-" , "Ming's Algo Learning" , 22 * "-")
+#     print("1. SPY with SMA")
+#     print("2. SMA crossover strategy backtest")
+#     print("3. AAPL and SPY price correlation")
+#     print("Q. Exit")
+#     print(66 * "-")
+        
+# loop=True
 
-while loop:          ## While loop which will keep going until loop = False
-    print_menu()    ## Displays menu
-    choice = input("Enter your choice [1-3] or Q: ")
-    print("Option %s" % (choice) + " selected")
+# while loop:          ## While loop which will keep going until loop = False
+#     print_menu()    ## Displays menu
+#     choice = input("Enter your choice [1-3] or Q: ")
+#     print("Option %s" % (choice) + " selected")
     
-    if choice == '1':     
-        ## You can add your code or functions here
-        plot_stock_with_sma()
-        loop=False
-    elif choice == '2':
-        plot_sma_crossover_vs_buy_and_hold_strategy_comparison()
-        loop=False
-    elif choice == '3':
-        plot_correlation("SPY", "AAPL")
-        loop=False
-    elif choice in ('Q', 'q'):
-        print("Exiting...")
-        loop=False
-    else:
-        print("Invalid option selection. Please try again..")
+#     if choice == '1':     
+#         ## You can add your code or functions here
+#         plot_stock_with_sma()
+#         loop=False
+#     elif choice == '2':
+#         plot_sma_crossover_vs_buy_and_hold_strategy_comparison()
+#         loop=False
+#     elif choice == '3':
+#         plot_correlation("SPY", "AAPL")
+#         loop=False
+#     elif choice in ('Q', 'q'):
+#         print("Exiting...")
+#         loop=False
+#     else:
+#         print("Invalid option selection. Please try again..")
