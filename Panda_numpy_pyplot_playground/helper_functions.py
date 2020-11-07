@@ -28,3 +28,4 @@ def plot_graph(data, legends, xLabel="", yLabel=""):
     plt.legend(legends)
     plt.xlabel(xLabel)
     plt.ylabel(yLabel)
+    plt.show()
